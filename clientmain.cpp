@@ -62,3 +62,86 @@ int main(int argc, char *argv[]){
         printf("Error in Connection\n"); 
   
     /
+    while(1)
+    {
+    	recv(client, buffer1, 1256, 0); 
+    	printf("Server : %s", buffer1); 
+    	if(buffer1[0] == '\n')
+    		break;
+    }
+    strcpy(buffer2, "OK\n"); 
+    send(client, buffer2, 1256, 0); 
+    cout << "\n";
+   	int interaction = 1;
+   	while(interaction)
+   	{
+   		recv(client, buffer1, 1256, 0); 
+		printf("Server Question : %s\n", buffer1); 
+
+		char str[1000];
+		strcpy(str,buffer1);
+		vector<string> ops;
+		char* token = strtok(str, " "); 
+	    while (token != NULL) { 
+	        // printf("%s\n", token);
+	        ops.push_back(token);
+	        token = strtok(NULL, " "); 
+	    } 
+	    if( ops[0][0] == 'f' )
+	    {
+	    	float myAns;
+	    	float v1 = stof(ops[1]);
+	    	float v2 = stof(ops[2]);
+	    	if( ops[0] == "fadd" )
+	    		myAns = v1+v2;
+	    	else if( ops[0]=="fsub" )
+	    		myAns = v1-v2;
+	    	else if( ops[0]=="fdiv" )
+	    		myAns = v1/v2;
+	    	else myAns = v1*v2;
+
+	    	char answer[100];
+		    int j=0;
+		    string ans = to_string(myAns);
+		    for(int i=0;i<ans.length();i++)
+		    	answer[j++] = ans[i];
+		    answer[j] = '\0';
+		    
+		    strcpy(buffer2, answer); 
+	    	send(client, buffer2, 1256, 0); 
+	    }
+	    else{
+	    	int myAns;
+	    	int v1 = stoi(ops[1]);
+	    	int v2 = stoi(ops[2]);
+	    	if( ops[0] == "add" )
+	    		myAns = v1+v2;
+	    	else if( ops[0]=="sub" )
+	    		myAns = v1-v2;
+	    	else if( ops[0]=="div" )
+	    		myAns = v1/v2;
+	    	else myAns = v1*v2;
+
+	    	char answer[100];
+		    int j=0;
+		    string ans = to_string(myAns);
+		    for(int i=0;i<ans.length();i++)
+		    	answer[j++] = ans[i];
+		    answer[j] = '\0';
+		    
+		    strcpy(buffer2, answer); 
+	    	send(client, buffer2, 1256, 0); 
+	    }
+
+	    recv(client, buffer1, 1256, 0); 
+		printf("Server : %s\n", buffer1); 
+	    interaction-=1;
+
+   	}
+	
+    
+    
+    return 0; 
+  
+
+}
