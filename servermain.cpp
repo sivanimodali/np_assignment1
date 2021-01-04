@@ -148,4 +148,90 @@ int main(int argc, char *argv[]){
   					actualAns = v1/v2;
   				}
   				// cout << v1 << " " << v2 << " " << actualAns<< "\n";
-  				
+  				string sendOpString = convertToOpString(chosen_operation, v1, v2);
+          char send_str[100];
+          int j = 0;
+          for(int i=0;i<sendOpString.length();i++)
+            send_str[j++] = sendOpString[i];
+          send_str[j] = '\0';
+          printf("Question : %s\n",send_str );
+          strcpy(buffer1, send_str); 
+            send(acc, buffer1, 1256, 0); 
+
+            recv(acc, buffer2, 1256, 0); 
+            printf("Client's Answer : %s\n", buffer2); 
+            cout << "\n";
+
+            string b = buffer2;
+            float clientAnswer = stof(b);
+            if( abs(clientAnswer-actualAns) < 0.0001 )
+            {
+              strcpy(buffer1, "OK"); 
+              send(acc, buffer1, 1256, 0); 
+            }
+          else
+            {
+              strcpy(buffer1, "ERROR"); 
+              send(acc, buffer1, 1256, 0); 
+            }
+          
+
+        }
+        else{
+          // normal integer operation
+          int v1 = rand()%LIMIT;
+          int v2 = rand()%LIMIT;
+          int actualAns;
+          if( chosen_operation == "add" )
+            actualAns = v1+v2;
+          if( chosen_operation == "sub" )
+            actualAns = v1-v2;
+          if( chosen_operation=="mul" )
+            actualAns = v1*v2;
+          if( chosen_operation=="div" )
+          {
+            // no divison of 0 is allowed
+            if(v2 == 0)
+              v2+=1;
+            actualAns = v1/v2;
+          }
+          // cout << v1 << " " << v2 << " " << actualAns<< "\n";
+          string sendOpString = convertToOpString(chosen_operation, v1, v2);
+          char send_str[100];
+          int j = 0;
+          for(int i=0;i<sendOpString.length();i++)
+            send_str[j++] = sendOpString[i];
+          send_str[j] = '\0';
+          printf("Question: %s\n",send_str );
+          strcpy(buffer1, send_str); 
+            send(acc, buffer1, 1256, 0); 
+
+            recv(acc, buffer2, 1256, 0); 
+            printf("Client's Answer : %s\n", buffer2); 
+            cout << "\n";
+
+            string b = buffer2;
+            int clientAnswer = stoi(b);
+            if( abs(clientAnswer-actualAns) == 0 )
+            {
+              strcpy(buffer1, "OK"); 
+              send(acc, buffer1, 1256, 0); 
+            }
+          else
+            {
+              strcpy(buffer1, "ERROR"); 
+              send(acc, buffer1, 1256, 0); 
+            }
+        }
+
+        interaction-=1;
+          
+
+      }
+        
+        
+    }  
+    return 0; 
+
+
+}
