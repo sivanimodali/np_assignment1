@@ -61,7 +61,8 @@ int main(int argc, char *argv[]){
     else
         printf("Error in Connection\n"); 
   
-    /
+    // strcpy(buffer2, "Hello"); 
+    // send(client, buffer2, 256, 0);  
     while(1)
     {
     	recv(client, buffer1, 1256, 0); 
